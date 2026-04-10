@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — FlaskApp{% endblock %}
+
+{% block extra_style %}
+<style>
+  .dashboard-card { max-width: 500px; }
+
+  .avatar {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 800; color: #0d0d0f;
+    margin-bottom: 1.4rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(232,255,71,.12);
+    color: var(--accent);
+    font-size: .75rem; font-weight: 600;
+    padding: .25rem .7rem; border-radius: 99px;
+    letter-spacing: .04em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .stats-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin: 1.6rem 0;
+  }
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .stat-box .val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800; color: var(--accent2);
+  }
+  .stat-box .lbl { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card dashboard-card">
+  <div class="card-logo">
+    <div class="dot"></div>
+    <span>FlaskApp</span>
+  </div>
+
+  <div class="avatar">{{ username[0].upper() }}</div>
+
+  <span class="tag">✓ Authenticated</span>
+  <h1>Hey, {{ username }}!</h1>
+  <p class="subtitle">You're successfully logged in. This is your dashboard.</p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="val">1</div>
+      <div class="lbl">Active Session</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">MySQL</div>
+      <div class="lbl">Database</div>
+    </div>
+  </div>
+
+  <a href="{{ url_for('logout') }}" class="btn btn-outline">Log Out</a>
+</div>
+{% endblock %}

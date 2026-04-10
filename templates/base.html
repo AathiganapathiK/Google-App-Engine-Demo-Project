@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}FlaskApp{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d0f;
+      --surface:  #16161a;
+      --border:   #2a2a30;
+      --accent:   #e8ff47;
+      --accent2:  #47c8ff;
+      --text:     #f0f0f4;
+      --muted:    #7a7a8c;
+      --error:    #ff5b5b;
+      --success:  #47ffb0;
+      --warning:  #ffc547;
+      --radius:   14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 70% 10%, rgba(232,255,71,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 20% 90%, rgba(71,200,255,0.05) 0%, transparent 60%);
+    }
+
+    /* ── Flash messages ── */
+    .flash-list { width: 100%; max-width: 440px; margin-bottom: 1.2rem; list-style: none; }
+    .flash-list li {
+      padding: .7rem 1rem;
+      border-radius: 8px;
+      font-size: .875rem;
+      font-weight: 500;
+      margin-bottom: .5rem;
+      border-left: 3px solid;
+    }
+    .flash-list li.error   { background: rgba(255,91,91,.12);  border-color: var(--error);   color: var(--error); }
+    .flash-list li.success { background: rgba(71,255,176,.10); border-color: var(--success); color: var(--success); }
+    .flash-list li.warning { background: rgba(255,197,71,.10); border-color: var(--warning); color: var(--warning); }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.4rem 2.2rem;
+      width: 100%;
+      max-width: 440px;
+      animation: slideUp .35s ease both;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform: translateY(18px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .card-logo {
+      display: flex; align-items: center; gap: .6rem;
+      margin-bottom: 2rem;
+    }
+    .card-logo .dot {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--accent);
+    }
+    .card-logo span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.1rem;
+      letter-spacing: -.01em;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.7rem; font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: .4rem;
+    }
+    .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 1.8rem; }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 1.1rem; }
+    label { display: block; font-size: .8rem; font-weight: 500; color: var(--muted); margin-bottom: .45rem; letter-spacing: .04em; text-transform: uppercase; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      padding: .75rem 1rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,255,71,.12);
+    }
+    input::placeholder { color: var(--muted); }
+
+    /* ── Button ── */
+    .btn {
+      display: block; width: 100%;
+      padding: .82rem 1rem;
+      border: none; border-radius: 8px; cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      font-size: .95rem; font-weight: 700;
+      letter-spacing: .01em;
+      transition: transform .15s, opacity .15s;
+    }
+    .btn:hover  { opacity: .9; }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { background: var(--accent); color: #0d0d0f; margin-top: 1.4rem; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      margin-top: .7rem;
+    }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.6rem 0; }
+    .link-row { text-align: center; font-size: .875rem; color: var(--muted); }
+    .link-row a { color: var(--accent2); text-decoration: none; font-weight: 500; }
+    .link-row a:hover { text-decoration: underline; }
+  </style>
+  {% block extra_style %}{% endblock %}
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-list">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,33 @@
+runtime: python312          # or python311 — check GAE supported runtimes
+
+instance_class: F1          # Free-tier instance; upgrade as needed
+
+entrypoint: gunicorn -b :$PORT app:app
+
+# ─── Environment variables ────────────────────────────────────────────────────
+# Replace the values below with your actual credentials.
+# For production, prefer Secret Manager (see README).
+env_variables:
+  SECRET_KEY: "CHANGE_ME_TO_A_LONG_RANDOM_STRING"
+
+  # ── Option A: Cloud SQL (recommended for GAE) ──────────────────────────────
+  # Uncomment and fill in when using Cloud SQL with Unix socket.
+  # DB_HOST:   "/cloudsql/YOUR_PROJECT:YOUR_REGION:YOUR_INSTANCE"
+  # DB_USER:   "flaskapp_user"
+  # DB_PASS:   "your_db_password"
+  # DB_NAME:   "flaskapp"
+
+  # ── Option B: External MySQL host ─────────────────────────────────────────
+  DB_HOST:   "[IP_ADDRESS]"
+  DB_USER:   "root"
+  DB_PASS:   "aathik01@08"
+  DB_NAME:   "flaskapp"
+  SECRET_KEY: "tft32g6t53qg465fg673f"
+# ─── Cloud SQL connections (Option A only) ────────────────────────────────────
+# beta_settings:
+#   cloud_sql_instances: "YOUR_PROJECT:YOUR_REGION:YOUR_INSTANCE"
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always           # Force HTTPS in production
