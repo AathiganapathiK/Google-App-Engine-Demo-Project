@@ -4,25 +4,27 @@ import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.secret_key = os.environ.get("SECRET_KEY", "change-this-in-production")
 
 # ─── Database connection ──────────────────────────────────────────────────────
-
 def get_db():
-    """
-    Returns a new PyMySQL connection.
-    Reads credentials from environment variables (set via GAE app.yaml or .env).
-    """
     return pymysql.connect(
-        host=os.environ.get("DB_HOST", "127.0.0.1"),
-        user=os.environ.get("DB_USER", "root"),
-        password=os.environ.get("DB_PASS", ""),
-        database=os.environ.get("DB_NAME", "flaskapp"),
+        host=os.environ.get("DB_HOST"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASS"),
+        database=os.environ.get("DB_NAME"),
+        port=int(os.environ.get("DB_PORT", 3306)),  # ✅ ADD THIS
         cursorclass=pymysql.cursors.DictCursor,
         autocommit=True,
-    )
 
+        # ✅ REQUIRED for Aiven
+        ssl={
+            "ssl": {
+                "ca": "/etc/ssl/certs/ca-certificates.crt"
+            }
+        }
+    )
 
 def init_db():
     """Create the users table if it doesn't exist."""
